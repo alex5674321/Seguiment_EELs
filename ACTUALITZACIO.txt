@@ -1,0 +1,25 @@
+ACTUALITZACIÓ · SEGUIMENT EEL
+
+1. Tanca el fitxer index.html si el tens obert.
+2. Descomprimeix aquest ZIP.
+3. Copia index.html, style.css, app.js i README.md a:
+   C:\Users\floga\OneDrive\Desktop\PracticasEELs\GitHub
+4. Accepta substituir aquests quatre fitxers.
+5. Conserva la carpeta data i el fitxer data/diary.json originals.
+   Aquest ZIP no conté dades buides ni substitueix les teves anotacions.
+6. Puja els quatre fitxers al repositori de GitHub per actualitzar Pages.
+7. Quan s’hagi publicat, recarrega la pàgina amb Ctrl+F5.
+
+Els canvis de la pàgina es desen a GitHub en mode d’edició. La carpeta
+local no se sincronitza automàticament amb els esdeveniments nous.
+
+NOVETATS
+- Interfície en català i disseny fosc: negre, gris, blanc i verd.
+- Fitxa setmanal i gràfic diari a Resum.
+- Seguiment amb targetes automàtiques de cada setmana amb activitat.
+- Tasques amb targetes i subtasques.
+- Calendari compacte a l’esquerra i propers esdeveniments a la dreta.
+- HouseKeeping passa a dir-se Manteniment.
+
+Les dades existents es conserven. La versió original de data/diary.json
+és compatible amb aquesta actualització.
