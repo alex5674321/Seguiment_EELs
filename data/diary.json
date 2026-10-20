@@ -8,6 +8,16 @@
       "parent": ""
     }
   ],
-  "events": [],
+  "events": [
+    {
+      "id": "2a44d3e5-bafd-4821-9f2e-9c278f4c24c6",
+      "title": "gola",
+      "date": "2026-10-20",
+      "start": "09:00",
+      "minutes": 60,
+      "project": "a084cbea-eb54-463e-921d-964fbd40d0f0",
+      "description": ""
+    }
+  ],
   "notes": []
 }
