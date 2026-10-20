@@ -14,12 +14,12 @@ The app reads `data/diary.json` from GitHub first and falls back to the local co
 
 ## Use the journal
 
-- **Overview:** today's hours, weekly and total time, a weekly card and time by task.
-- **Calendar:** day, week and month views, plus upcoming activities.
+- **Overview:** logged activity grouped by task, with indented subtasks, descriptions and time. Parent totals include descendant tasks; activities appear once under their own task. Future scheduled activity is excluded from logged totals.
+- **Calendar:** a focused task scheduling calendar with day, week and month views. Choose a day and set start/end times.
 - **Tracking:** editable weekly titles and summaries alongside calendar activities. Use **Edit card** or **+ Weekly card**. Moving a summary to another week does not move calendar activities.
 - **Tasks:** create, edit and delete tasks and subtasks. Drag the handle or use the up/down arrows to reorder them. Change the parent task in the edit form.
 - **My tasks:** open a task from the sidebar, edit it with the pencil or delete it with **×**. Deletion requires confirmation, preserves activities without that task, and moves direct subtasks to the top level.
-- **Housekeeping:** create, edit, complete and delete notes.
+- **Housekeeping:** a simple notes board for questions, reminders and ideas. Create, edit or delete notes. No activity logging or completion checkboxes; existing notes remain available.
 
 Activity forms ask for start and end dates and times. Duration is calculated automatically. End must be after start; select the following end date for overnight work. Existing activities containing only a start time and duration remain compatible, and their end time is calculated when editing. Time is attributed to the activity's start date. Future activities are shown as planned and excluded from Overview and weekly logged totals until their start time. Reload to update those calculations.
 
@@ -43,3 +43,9 @@ node tests/browser.cjs
 ```
 
 The test defaults to `/usr/bin/chromium`; use `CHROMIUM_PATH` to select another executable. It mocks GitHub requests and never writes test data to the real diary. It covers navigation, fallback loading, editing, ordering, sidebar deletion, weekly summaries, concurrent changes, time validation, legacy durations, overnight activities and mobile layout.
+
+## Task views and mobile use
+
+Use **By tasks** for the indented hierarchy, or **By status** for the four-column board: **TO DO**, **In progress**, **Checking**, **Done**. Drag the task handle into a column to save its status. On mobile or with a keyboard, use the card’s **Move to** selector. Each subtask has its own status. Existing tasks default to **TO DO** until changed. The status is saved alongside each task and preserved when editing.
+
+Use **Refresh** to load the latest diary data without signing out. On mobile, the board stacks vertically, controls have larger touch targets, and unnecessary headings are hidden. Refresh is unavailable while saving or editing an open form, so it cannot discard the form.
