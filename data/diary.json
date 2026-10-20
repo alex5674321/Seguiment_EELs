@@ -1,13 +1,12 @@
 {
   "version": 1,
-  "projects": [
-    {
-      "id": "a084cbea-eb54-463e-921d-964fbd40d0f0",
-      "title": "no se",
-      "description": "",
-      "parent": ""
-    }
-  ],
+  "projects": [],
   "events": [],
-  "notes": []
+  "notes": [],
+  "weeks": {
+    "2026-10-12": {
+      "title": "",
+      "summary": ""
+    }
+  }
 }
