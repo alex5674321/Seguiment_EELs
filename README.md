@@ -10,6 +10,10 @@ A GitHub, ves a **Settings → Pages → Build and deployment**. Tria **Deploy f
 
 Adreça: https://alex5674321.github.io/Seguiment_EELs/
 
+## Desenvolupament local
+
+Des de l’arrel del repositori, executa `python3 -m http.server 8000 --bind 127.0.0.1`. No cal instal·lar dependències. El fitxer `data/diary.json` inicial és buit; si tens un diari anterior, conserva’l abans de publicar. La lectura local intenta primer GitHub i, si falla, utilitza aquest fitxer. Els canvis del mode d’edició es desen al repositori real.
+
 ## Apartats
 
 - **Resum:** hores d’avui, de la setmana i totals; fitxa de la setmana actual amb activitats, tasques treballades, dies amb activitat i gràfic diari; temps acumulat per tasca.
