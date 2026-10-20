@@ -2,5 +2,11 @@
   "version": 1,
   "projects": [],
   "events": [],
-  "notes": []
+  "notes": [],
+  "weeks": {
+    "2026-10-12": {
+      "title": "",
+      "summary": ""
+    }
+  }
 }
