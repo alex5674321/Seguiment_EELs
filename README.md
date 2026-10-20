@@ -42,3 +42,11 @@ El contingut es desa a `data/diary.json`, a la branca `main`, amb historial de v
 La lectura és pública. Els visitants obtenen el contingut actual des de GitHub; si l’API falla, s’intenta carregar la còpia publicada a Pages, que pot portar uns minuts de retard. Cal recarregar la pàgina per veure canvis recents.
 
 La interfície és en català. Els títols, les notes i les descripcions que ja hagis escrit es conserven tal com els vas introduir.
+
+## Gestionar tasques i fitxes setmanals
+
+En **Mode d’edició**, a **Tasques** pots crear, editar i eliminar targetes. També pots eliminar la tasca des del seu detall. Abans d’eliminar es demana confirmació: les activitats es conserven sense tasca i les subtasques passen al nivell principal.
+
+Arrossega la nansa **⠿ Arrossegar** sobre una altra targeta per canviar l’ordre. Els botons **↑ / ↓** permeten fer el mateix amb teclat o mòbil. L’ordre es desa a GitHub i també s’aplica al menú lateral. Per canviar la tasca pare d’una subtasca, fes servir **Editar → Dins de**.
+
+A **Seguiment**, prem **Editar fitxa** per escriure el títol i el resum del que has fet aquella setmana. **+ Fitxa setmanal** permet triar una setmana, encara que no tingui activitats. Les notes setmanals es desen al camp opcional `weeks` de `data/diary.json`, compatible amb els diaris anteriors. Les hores continuen calculant-se a partir de les activitats, que pots afegir o editar des de la fitxa. Canviar la setmana de la nota no mou les activitats del calendari.
