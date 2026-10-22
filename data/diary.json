@@ -1,6 +1,14 @@
 {
   "version": 1,
-  "projects": [],
+  "projects": [
+    {
+      "id": "d9c8e42f-87df-4d17-a6c0-e0f8500e896b",
+      "status": "Done",
+      "title": "Pre-Test part 1",
+      "description": "Es demana fer un test sobre IA",
+      "parent": ""
+    }
+  ],
   "events": [
     {
       "id": "cfc14b58-62a2-4dd9-abe3-91f708d45474",
