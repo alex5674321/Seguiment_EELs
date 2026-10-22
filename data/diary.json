@@ -14,6 +14,13 @@
       "title": "Mudanza Parc Tecnologic",
       "description": "Fer canvis en l'area de UdiGitalEdu",
       "parent": ""
+    },
+    {
+      "id": "da72c26c-dfb2-476b-a207-9206ca9279eb",
+      "status": "In progress",
+      "title": "Reviews LPs Marian",
+      "description": "Fer revisió de les LPs preparades pel projecte Marian, on:\n- Es revisa que les activitats siguin adequades pel grup d'edat d'alumnes\n- Es revisa qualitat del document\n- Fer QRs de links\n- Fer exemples de Scratch o fer-ne de simples\n- Imatges pel document\n- Perfilar els documents",
+      "parent": ""
     }
   ],
   "events": [
