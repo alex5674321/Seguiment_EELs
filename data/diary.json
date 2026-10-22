@@ -7,6 +7,13 @@
       "title": "Pre-Test",
       "description": "Es demana fer un test sobre IA",
       "parent": ""
+    },
+    {
+      "id": "396d9654-a65d-46aa-9039-6eb9ff66065f",
+      "status": "In progress",
+      "title": "Mudanza Parc Tecnologic",
+      "description": "Fer canvis en l'area de UdiGitalEdu",
+      "parent": ""
     }
   ],
   "events": [
