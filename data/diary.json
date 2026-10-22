@@ -100,6 +100,17 @@
       "minutes": 120,
       "project": "da72c26c-dfb2-476b-a207-9206ca9279eb",
       "description": ""
+    },
+    {
+      "id": "60bde412-55b2-4a9f-bd05-fb62a7f24946",
+      "title": "Revisió LPs part 2",
+      "date": "2026-10-20",
+      "start": "09:30",
+      "endDate": "2026-10-20",
+      "end": "12:00",
+      "minutes": 150,
+      "project": "da72c26c-dfb2-476b-a207-9206ca9279eb",
+      "description": ""
     }
   ],
   "notes": [],
