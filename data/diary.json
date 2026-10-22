@@ -71,6 +71,17 @@
       "minutes": 150,
       "project": "396d9654-a65d-46aa-9039-6eb9ff66065f",
       "description": ""
+    },
+    {
+      "id": "793be2d6-44b0-451c-99fd-8f06e04c90ab",
+      "title": "Reunió",
+      "date": "2026-10-19",
+      "start": "09:45",
+      "endDate": "2026-10-23",
+      "end": "10:25",
+      "minutes": 5800,
+      "project": "",
+      "description": ""
     }
   ],
   "notes": [],
