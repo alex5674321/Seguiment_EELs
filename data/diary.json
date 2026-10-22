@@ -60,6 +60,17 @@
       "minutes": 120,
       "project": "d9c8e42f-87df-4d17-a6c0-e0f8500e896b",
       "description": ""
+    },
+    {
+      "id": "1630e87f-1a36-49c7-8c1a-7708d8cb0cf4",
+      "title": "Mudanza part 1",
+      "date": "2026-10-21",
+      "start": "10:30",
+      "endDate": "2026-10-21",
+      "end": "13:00",
+      "minutes": 150,
+      "project": "396d9654-a65d-46aa-9039-6eb9ff66065f",
+      "description": ""
     }
   ],
   "notes": [],
