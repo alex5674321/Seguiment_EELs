@@ -111,6 +111,17 @@
       "minutes": 150,
       "project": "da72c26c-dfb2-476b-a207-9206ca9279eb",
       "description": ""
+    },
+    {
+      "id": "b7a9548f-0e26-493b-91d9-3326c505ac71",
+      "title": "Reunió Posada en Comú de LPs",
+      "date": "2026-10-22",
+      "start": "10:30",
+      "endDate": "2026-10-22",
+      "end": "11:30",
+      "minutes": 60,
+      "project": "",
+      "description": ""
     }
   ],
   "notes": [],
