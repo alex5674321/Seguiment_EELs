@@ -31,6 +31,17 @@
       "minutes": 45,
       "project": "",
       "description": "Reunió per debatre sobre les activitats que hem de fer de les EELs"
+    },
+    {
+      "id": "01412626-2318-4bbd-82e0-a817c1411241",
+      "title": "Fer Pre-Test part 1",
+      "date": "2026-10-15",
+      "start": "12:00",
+      "endDate": "2026-10-15",
+      "end": "14:00",
+      "minutes": 120,
+      "project": "d9c8e42f-87df-4d17-a6c0-e0f8500e896b",
+      "description": ""
     }
   ],
   "notes": [],
