@@ -15,8 +15,8 @@ The app reads `data/diary.json` from GitHub first and falls back to the local co
 ## Use the journal
 
 - **Overview:** logged activity grouped by task, with indented subtasks, descriptions and time. Parent totals include descendant tasks; activities appear once under their own task. Future scheduled activity is excluded from logged totals.
-- **Calendar:** a focused task scheduling calendar with day, week and month views. Choose a day and set start/end times.
-- **Tracking:** editable weekly titles and summaries alongside calendar activities. Use **Edit card** or **+ Weekly card**. Moving a summary to another week does not move calendar activities.
+- **Calendar:** a monthly scheduling calendar. Select a day to see its activities in the right-hand agenda, then use **+ Schedule task**. On mobile the agenda appears below the month.
+- **Tracking:** compact weekly cards that expand when clicked, with editable titles and summaries alongside calendar activities. Use **Edit card** or **+ Weekly card**. Moving a summary to another week does not move calendar activities.
 - **Tasks:** create, edit and delete tasks and subtasks. Drag the handle or use the up/down arrows to reorder them. Change the parent task in the edit form.
 - **My tasks:** open a task from the sidebar, edit it with the pencil or delete it with **×**. Deletion requires confirmation, preserves activities without that task, and moves direct subtasks to the top level.
 - **Housekeeping:** a simple notes board for questions, reminders and ideas. Create, edit or delete notes. No activity logging or completion checkboxes; existing notes remain available.
@@ -49,3 +49,5 @@ The test defaults to `/usr/bin/chromium`; use `CHROMIUM_PATH` to select another 
 Use **By tasks** for the indented hierarchy, or **By status** for the four-column board: **TO DO**, **In progress**, **Checking**, **Done**. Drag the task handle into a column to save its status. On mobile or with a keyboard, use the card’s **Move to** selector. Each subtask has its own status. Existing tasks default to **TO DO** until changed. The status is saved alongside each task and preserved when editing.
 
 Use **Refresh** to load the latest diary data without signing out. On mobile, the board stacks vertically, controls have larger touch targets, and unnecessary headings are hidden. Refresh is unavailable while saving or editing an open form, so it cannot discard the form.
+
+Task cards are compact in both views. Open **Manage** on a card to change its status; drag handles and edit/delete controls remain available in edit mode.
