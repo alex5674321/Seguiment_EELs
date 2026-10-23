@@ -1,7 +1,129 @@
 {
   "version": 1,
-  "projects": [],
-  "events": [],
+  "projects": [
+    {
+      "id": "d9c8e42f-87df-4d17-a6c0-e0f8500e896b",
+      "status": "Done",
+      "title": "Pre-Test",
+      "description": "Es demana fer un test sobre IA",
+      "parent": ""
+    },
+    {
+      "id": "396d9654-a65d-46aa-9039-6eb9ff66065f",
+      "status": "In progress",
+      "title": "Mudanza Parc Tecnologic",
+      "description": "Fer canvis en l'area de UdiGitalEdu",
+      "parent": ""
+    },
+    {
+      "id": "da72c26c-dfb2-476b-a207-9206ca9279eb",
+      "status": "In progress",
+      "title": "Reviews LPs Marian",
+      "description": "Fer revisió de les LPs preparades pel projecte Marian, on:\n- Es revisa que les activitats siguin adequades pel grup d'edat d'alumnes\n- Es revisa qualitat del document\n- Fer QRs de links\n- Fer exemples de Scratch o fer-ne de simples\n- Imatges pel document\n- Perfilar els documents",
+      "parent": ""
+    }
+  ],
+  "events": [
+    {
+      "id": "cfc14b58-62a2-4dd9-abe3-91f708d45474",
+      "title": "Reunió Inicial",
+      "date": "2026-10-14",
+      "start": "09:00",
+      "endDate": "2026-10-14",
+      "end": "11:00",
+      "minutes": 120,
+      "project": "",
+      "description": "Reunió inicial per parlar de com anirá tot, visita per CIRS i Parc Tecnologic"
+    },
+    {
+      "id": "46b3489b-d673-4a8d-b150-0c6a6d31ec9c",
+      "title": "Reunió",
+      "date": "2026-10-16",
+      "start": "10:50",
+      "endDate": "2026-10-16",
+      "end": "11:30",
+      "minutes": 40,
+      "project": "",
+      "description": "Reunió per debatre sobre les activitats que hem de fer de les EELs"
+    },
+    {
+      "id": "01412626-2318-4bbd-82e0-a817c1411241",
+      "title": "Fer Pre-Test part 1",
+      "date": "2026-10-15",
+      "start": "09:00",
+      "endDate": "2026-10-15",
+      "end": "12:00",
+      "minutes": 180,
+      "project": "d9c8e42f-87df-4d17-a6c0-e0f8500e896b",
+      "description": ""
+    },
+    {
+      "id": "1d79390d-b41b-4ce8-beb6-320658cc630a",
+      "title": "Fer Pre-Test part 2",
+      "date": "2026-10-16",
+      "start": "17:00",
+      "endDate": "2026-10-16",
+      "end": "19:00",
+      "minutes": 120,
+      "project": "d9c8e42f-87df-4d17-a6c0-e0f8500e896b",
+      "description": ""
+    },
+    {
+      "id": "1630e87f-1a36-49c7-8c1a-7708d8cb0cf4",
+      "title": "Mudanza part 1",
+      "date": "2026-10-21",
+      "start": "10:30",
+      "endDate": "2026-10-21",
+      "end": "13:00",
+      "minutes": 150,
+      "project": "396d9654-a65d-46aa-9039-6eb9ff66065f",
+      "description": ""
+    },
+    {
+      "id": "793be2d6-44b0-451c-99fd-8f06e04c90ab",
+      "title": "Reunió",
+      "date": "2026-10-19",
+      "start": "09:45",
+      "endDate": "2026-10-19",
+      "end": "10:25",
+      "minutes": 40,
+      "project": "",
+      "description": ""
+    },
+    {
+      "id": "92d708d2-85de-4a7d-b3da-ee128d4bbd51",
+      "title": "Revisió LPs part 1",
+      "date": "2026-10-19",
+      "start": "10:00",
+      "endDate": "2026-10-19",
+      "end": "12:00",
+      "minutes": 120,
+      "project": "da72c26c-dfb2-476b-a207-9206ca9279eb",
+      "description": ""
+    },
+    {
+      "id": "60bde412-55b2-4a9f-bd05-fb62a7f24946",
+      "title": "Revisió LPs part 2",
+      "date": "2026-10-20",
+      "start": "09:30",
+      "endDate": "2026-10-20",
+      "end": "12:00",
+      "minutes": 150,
+      "project": "da72c26c-dfb2-476b-a207-9206ca9279eb",
+      "description": ""
+    },
+    {
+      "id": "b7a9548f-0e26-493b-91d9-3326c505ac71",
+      "title": "Reunió Posada en Comú de LPs",
+      "date": "2026-10-22",
+      "start": "10:30",
+      "endDate": "2026-10-22",
+      "end": "11:30",
+      "minutes": 60,
+      "project": "",
+      "description": ""
+    }
+  ],
   "notes": [],
   "weeks": {
     "2026-10-12": {
