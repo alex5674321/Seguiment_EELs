@@ -62,7 +62,7 @@ function feedbackEditForm(id){
         const saved=await fetch(endpoint,{method:'PUT',headers:{...headers,'Content-Type':'application/json'},body:JSON.stringify({message:'Edit visitor feedback',content,sha:file.sha,branch:'main'})});
         if(saved.status===409)continue;
         if(!saved.ok)throw Error(`Feedback was not saved (${saved.status}). Check your token permissions.`);
-        feedbackRows=updated.slice(-50);markFeedbackRead([id]);renderFeedbackList();status('Feedback saved to GitHub ✓');return true;
+        feedbackRows=updated.slice(-50);renderFeedbackList();status('Feedback saved to GitHub ✓');return true;
       }
       throw Error('Other feedback is being saved. Please try again.');
     }catch(error){status('Feedback changes not saved');throw error;}
