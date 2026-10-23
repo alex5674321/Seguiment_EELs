@@ -53,7 +53,7 @@ function feedbackEditForm(id,deleting=false){
         const rows=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(file.content.replace(/\s/g,'')),c=>c.charCodeAt(0))));
         if(!Array.isArray(rows))throw Error('Invalid feedback file.');
         const current=rows.find(row=>row.id===id);
-        if(!current||JSON.stringify(current)!==JSON.stringify(original)){
+        if(!current||['id','name','message','created_at','edited_at'].some(key=>(current[key]??'')!==(original[key]??''))){
           feedbackRows=rows.slice(-50);renderFeedbackList();
           throw Error('This feedback changed or was removed. The latest version has been loaded; reopen it before editing.');
         }
@@ -114,5 +114,6 @@ document.addEventListener('click',async e=>{const b=e.target.closest('button,[da
 document.addEventListener('change',async e=>{if(e.target.id==='calendarMonth'){if(e.target.value){cursor=dateOf(e.target.value+'-01');selectedDay=dayKey(cursor);render();}return;}if(e.target.dataset.taskStatus){await setTaskState(e.target.dataset.taskStatus,e.target.value);return;}const id=e.target.dataset.toggleNote;if(!id)return;try{await save(d=>{const n=d.notes.find(x=>x.id===id);n.done=!n.done;});}catch(err){render();status(err.message);}});
 document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.dataset.day){e.preventDefault();e.target.click();}});
 window.addEventListener('beforeunload',e=>{if(busy){e.preventDefault();e.returnValue='';}});
+if(location.hash==='#housekeeping')view='housekeeping';
 load();
 loadFeedback();
