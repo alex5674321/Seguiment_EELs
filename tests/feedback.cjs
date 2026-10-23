@@ -4,8 +4,8 @@ const assert=require('node:assert/strict');
  const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium'});
  const page=await browser.newPage({viewport:{width:390,height:844}});const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.route('https://api.github.com/**',route=>route.fulfill({status:503,json:{message:'offline'}}));
- await page.goto('http://127.0.0.1:8000');await page.locator('nav [data-view="housekeeping"]').click();assert.match(await page.locator('.feedback-setup').innerText(),/not connected/);assert.equal(await page.locator('#feedbackForm').count(),0);
- await page.route('**/feedback-config.js',route=>route.fulfill({contentType:'text/javascript',body:"window.FEEDBACK_CONFIG={endpoint:'https://test-feedback.workers.dev/feedback'};"}));
+ await page.route('**/feedback-config.js*',route=>route.fulfill({contentType:'text/javascript',body:"window.FEEDBACK_CONFIG={endpoint:''};"}));await page.goto('http://127.0.0.1:8000');await page.locator('nav [data-view="housekeeping"]').click();assert.match(await page.locator('.feedback-setup').innerText(),/not connected/);assert.equal(await page.locator('#feedbackForm').count(),0);
+ await page.route('**/feedback-config.js*',route=>route.fulfill({contentType:'text/javascript',body:"window.FEEDBACK_CONFIG={endpoint:'https://test-feedback.workers.dev/feedback'};"}));
  let rows=[],fail=false;
  await page.route('https://test-feedback.workers.dev/**',route=>{const req=route.request();assert.equal(req.headers().apikey,undefined);assert.equal(req.headers().authorization,undefined);
   if(req.method()==='POST'){assert.match(req.url(),/\/feedback$/);const body=req.postDataJSON();if(body.visitor_code!=='AlexEELs')return route.fulfill({status:403,json:{message:'wrong code'}});if(fail)return route.fulfill({status:500,json:{message:'unavailable'}});const row={id:'feedback-'+rows.length,name:body.author,message:body.feedback,created_at:new Date().toISOString()};rows.unshift(row);return route.fulfill({status:200,json:[row]});}
