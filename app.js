@@ -35,6 +35,39 @@ document.addEventListener('dragover',e=>{if(draggedProject&&token&&!busy&&e.targ
 document.addEventListener('drop',e=>{const card=e.target.closest('[data-project-card]'),column=e.target.closest('[data-state-column]');if((!card&&!column)||!draggedProject)return;e.preventDefault();const id=draggedProject;draggedProject=null;if(column)setTaskState(id,column.dataset.stateColumn);else moveProject(id,card.dataset.projectCard);});
 document.addEventListener('dragend',()=>{draggedProject=null;});
 function isDescendant(id,ancestor){if(!ancestor)return false;const seen=new Set();let p=data.projects.find(x=>x.id===id);while(p?.parent&&!seen.has(p.id)){seen.add(p.id);if(p.parent===ancestor)return true;p=data.projects.find(x=>x.id===p.parent);}return false;}
+function feedbackEditForm(id){
+  if(!token||busy)return;
+  const original=feedbackRows?.find(row=>row.id===id);if(!original)return;
+  openForm('Edit feedback',input('Name','name','text',original.name||'','maxlength="80"')+textarea('Feedback','message',original.message),async form=>{
+    const name=form.get('name').trim(),message=form.get('message').trim();
+    if(!message||message.length>2000||name.length>80)throw Error('Feedback must contain 1–2000 characters; name must be at most 80 characters.');
+    busy=true;status('Saving feedback…');
+    try{
+      const endpoint=`https://api.github.com/repos/${REPO}/contents/data/feedback.json`;
+      const headers={Accept:'application/vnd.github+json',Authorization:`Bearer ${token}`};
+      for(let attempt=0;attempt<3;attempt++){
+        const response=await fetch(endpoint+'?ref=main',{headers,cache:'no-store'});
+        if(!response.ok)throw Error(`Cannot load feedback from GitHub (${response.status}).`);
+        const file=await response.json();
+        const rows=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(file.content.replace(/\s/g,'')),c=>c.charCodeAt(0))));
+        if(!Array.isArray(rows))throw Error('Invalid feedback file.');
+        const current=rows.find(row=>row.id===id);
+        if(!current||JSON.stringify(current)!==JSON.stringify(original)){
+          feedbackRows=rows.slice(-50);renderFeedbackList();
+          throw Error('This feedback changed or was removed. The latest version has been loaded; reopen it before editing.');
+        }
+        const updated=rows.map(row=>row.id===id?{...row,name,message,edited_at:new Date().toISOString()}:row);
+        const content=btoa(Array.from(new TextEncoder().encode(JSON.stringify(updated,null,2)+'\n'),b=>String.fromCharCode(b)).join(''));
+        const saved=await fetch(endpoint,{method:'PUT',headers:{...headers,'Content-Type':'application/json'},body:JSON.stringify({message:'Edit visitor feedback',content,sha:file.sha,branch:'main'})});
+        if(saved.status===409)continue;
+        if(!saved.ok)throw Error(`Feedback was not saved (${saved.status}). Check your token permissions.`);
+        feedbackRows=updated.slice(-50);markFeedbackRead([id]);renderFeedbackList();status('Feedback saved to GitHub ✓');return true;
+      }
+      throw Error('Other feedback is being saved. Please try again.');
+    }catch(error){status('Feedback changes not saved');throw error;}
+    finally{busy=false;}
+  });
+}
 function noteForm(id){const n=data.notes.find(x=>x.id===id);openForm(n?'Edit note':'Add note',textarea('Note','text',n?.text||''),async f=>{const text=f.get('text').trim();if(!text)throw Error('Enter a note.');return save(d=>{if(n)d.notes=d.notes.map(x=>x.id===id?{...x,text}:x);else d.notes.push({id:uid(),text,done:false});});});}
 async function remove(kind,id){if(!token)return;openForm('Confirm deletion','<p>This item will be deleted from the diary. '+(kind==='projects'?'Activities will be kept without this task; subtasks will move to the top level.':'')+'</p>',()=>save(d=>{d[kind]=d[kind].filter(x=>x.id!==id);if(kind==='projects'){d.events.forEach(e=>{if(e.project===id)e.project='';});d.projects.forEach(p=>{if(p.parent===id)p.parent='';});selectedProject=null;}}),'Delete');}
 function activityHTML(events){return events.length?ordered(events).map(e=>`<article class="activity"><div class="body"><h3>${esc(e.title)}</h3><div class="meta">${fmtDate(e.date)} · ${esc(eventRange(e))} · ${esc(pname(e.project))}</div>${e.description?`<p>${esc(e.description)}</p>`:''}<div class="edit-only"><button class="small" data-edit-event="${esc(e.id)}">Edit</button> <button class="small danger" data-delete="events" data-id="${esc(e.id)}">Delete</button></div></div><span class="duration">${duration(e.minutes)}</span></article>`).join(''):'<p class="empty">No activities yet. Log your first activity when you are ready.</p>';}
