@@ -14,10 +14,10 @@ The app reads `data/diary.json` from GitHub first and falls back to the local co
 
 ## Use the journal
 
-- **Overview:** logged activity grouped by task, with indented subtasks, descriptions and time. Parent totals include descendant tasks; activities appear once under their own task. Future scheduled activity is excluded from logged totals.
+- **Overview:** compact expandable task rows, indented subtasks and total logged time. Expand a row to see its activities. Parent totals include subtasks.
 - **Calendar:** a monthly scheduling calendar. Select a day to see its activities in the right-hand agenda, then use **+ Schedule task**. On mobile the agenda appears below the month.
 - **Tracking:** compact weekly cards that expand when clicked, with editable titles and summaries alongside calendar activities. Use **Edit card** or **+ Weekly card**. Moving a summary to another week does not move calendar activities.
-- **Tasks:** create, edit and delete tasks and subtasks. Drag the handle or use the up/down arrows to reorder them. Change the parent task in the edit form.
+- **Tasks:** minimized cards open a full task detail with description, dates, start/end times and total time dedicated directly to that task. Today/week counters appear in Tracking, not task details. Create, edit and delete tasks and subtasks. Drag the handle or use the up/down arrows to reorder them. Change the parent task in the edit form.
 - **My tasks:** open a task from the sidebar, edit it with the pencil or delete it with **×**. Deletion requires confirmation, preserves activities without that task, and moves direct subtasks to the top level.
 - **Housekeeping:** a simple notes board for questions, reminders and ideas. Create, edit or delete notes. No activity logging or completion checkboxes; existing notes remain available.
 
@@ -51,3 +51,7 @@ Use **By tasks** for the indented hierarchy, or **By status** for the four-colum
 Use **Refresh** to load the latest diary data without signing out. On mobile, the board stacks vertically, controls have larger touch targets, and unnecessary headings are hidden. Refresh is unavailable while saving or editing an open form, so it cannot discard the form.
 
 Task cards are compact in both views. Open **Manage** on a card to change its status; drag handles and edit/delete controls remain available in edit mode.
+
+## Visitor Feedback
+
+Housekeeping includes a separate Feedback area for visitors using the shared code `AlexEELs`, without a GitHub account or the diary editor token. It requires an external storage connection; until then, the UI clearly indicates that messages cannot be saved. See [FEEDBACK_SETUP.md](FEEDBACK_SETUP.md) to connect Supabase.
