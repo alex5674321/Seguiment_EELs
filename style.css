@@ -17,3 +17,5 @@
 .overview-meetings{margin-top:18px}.meeting-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px;margin-top:14px}.meeting-card{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:14px;min-width:0}.meeting-card>summary{cursor:pointer;display:grid;gap:6px}.meeting-card strong{overflow-wrap:anywhere}.meeting-card .activity{flex-wrap:wrap}.overview-total small{display:block;font-size:11px;color:var(--muted);margin-top:5px}.calendar-add-actions{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}@media(max-width:650px){.meeting-cards{grid-template-columns:1fr}}
 
 .feedback-card-actions{gap:6px;flex-wrap:wrap}dialog blockquote{margin:14px 0;padding:12px;border-left:3px solid var(--accent);white-space:pre-wrap;overflow-wrap:anywhere;background:var(--bg)}
+
+.calendar-activity-tools{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0}.day-agenda .activity .body{min-width:130px}.calendar-activity-tools button{white-space:nowrap}@media(max-width:650px){.calendar-activity-tools{align-items:flex-start;flex-direction:row;flex-wrap:wrap;align-items:center}}
