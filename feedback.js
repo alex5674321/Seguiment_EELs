@@ -6,6 +6,11 @@ function feedbackConnection(){
   try{const url=new URL(window.FEEDBACK_CONFIG?.endpoint);if(url.protocol!=='https:'||url.username||url.password)return null;return {endpoint:url.href,headers:{'Content-Type':'application/json'}};}catch{return null;}
 }
 function feedbackServiceError(code){return ({403:'Incorrect access code. Feedback was not saved.',404:'Feedback endpoint not found. The site owner needs to check the Worker URL.',409:'Feedback was not saved. Please press Send again.',503:'Feedback service needs setup. The site owner must configure GITHUB_TOKEN and FEEDBACK_CODE in Cloudflare.',502:'Feedback cannot connect to GitHub. The site owner needs to check the Worker token and repository permissions.'})[code]||`Feedback was not saved (HTTP ${code}). Please try again later.`;}
+async function feedbackResponseError(response){
+  let body;try{body=await response.json();}catch{}
+  const messages={GITHUB_TOKEN_INVALID:'The Worker GitHub token is invalid or expired. Update the GITHUB_TOKEN secret in Cloudflare.',GITHUB_PERMISSION_DENIED:'GitHub denied access. Give the Worker token access to Seguiment_EELs with Contents: Read and write.',GITHUB_RATE_LIMITED:'GitHub rate limit reached. Please try again later.',GITHUB_REPOSITORY_UNAVAILABLE:'The Worker cannot access the repository. Check the token repository selection.',GITHUB_UPSTREAM_ERROR:'GitHub is temporarily unavailable. Please try again later.'};
+  return messages[body?.code]||feedbackServiceError(response.status);
+}
 function feedbackRequestError(error){if(error.name==='TimeoutError'||error.name==='AbortError')return 'Feedback took too long to respond. Check your connection and try again; your message is kept.';if(error instanceof TypeError)return 'Cannot reach the feedback service. Check your connection. The site owner should also check the Worker URL and allowed origin.';return error.message;}
 function feedbackPanel(){
   const ready=!!feedbackConnection();
@@ -16,7 +21,7 @@ async function loadFeedback(){
   if(!connection||!list)return;
   try{
     const response=await fetch(connection.endpoint,{cache:'no-store',signal:AbortSignal.timeout(15000)});
-    if(!response.ok)throw Error(feedbackServiceError(response.status));
+    if(!response.ok)throw Error(await feedbackResponseError(response));
     const rows=await response.json();if(!Array.isArray(rows))throw Error('Invalid feedback response.');
     if(!list.isConnected)return;
     list.innerHTML=rows.length?[...rows].sort((a,b)=>a.created_at.localeCompare(b.created_at)).map(row=>`<article class="feedback-entry"><div class="meta">${esc(row.name||'Anonymous')} · ${esc(new Date(row.created_at).toLocaleString('en-GB'))}</div><p>${esc(row.message)}</p></article>`).join(''):'<p class="meta">No feedback yet. Be the first to share a thought.</p>';
@@ -37,7 +42,7 @@ document.addEventListener('submit',async event=>{
   try{
     const response=await fetch(connection.endpoint,{method:'POST',headers:connection.headers,signal:AbortSignal.timeout(15000),body:JSON.stringify({id:feedbackRequestId,visitor_code:code,author:name,feedback:message})});
     if(response.status===409)feedbackRequestId=crypto.randomUUID();
-    if(!response.ok)throw Error(feedbackServiceError(response.status));
+    if(!response.ok)throw Error(await feedbackResponseError(response));
     const rows=await response.json();if(!Array.isArray(rows)||!rows[0]?.id)throw Error('Save could not be confirmed. Refresh the feedback before sending again.');
     feedbackRequestId=crypto.randomUUID();feedbackDraft.name='';feedbackDraft.message='';form.reset();output.textContent='Feedback saved. Thank you!';await loadFeedback();
   }catch(error){output.textContent=feedbackRequestError(error);}

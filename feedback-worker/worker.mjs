@@ -9,11 +9,13 @@ export async function handle(request,env,githubFetch=fetch){
  if(request.method==='OPTIONS')return new Response(null,{status:204,headers});
  if(!['GET','POST'].includes(request.method))return reply({error:'Method not allowed'},405);
  if(!env.GITHUB_TOKEN||!env.FEEDBACK_CODE)return reply({error:'Feedback service is not configured'},503);
- const ghHeaders={Accept:'application/vnd.github+json',Authorization:`Bearer ${env.GITHUB_TOKEN}`,'X-GitHub-Api-Version':'2022-11-28','User-Agent':'EEL-Feedback'};
+ const ghHeaders={Accept:'application/vnd.github+json',Authorization:`Bearer ${env.GITHUB_TOKEN.trim()}`,'X-GitHub-Api-Version':'2022-11-28','User-Agent':'EEL-Feedback'};
+ const failure=(code,operation,upstreamStatus)=>Object.assign(new Error('Feedback request failed'),{safeCode:code,operation,upstreamStatus});
+ const upstreamFailure=(response,operation)=>failure(response.status===401?'GITHUB_TOKEN_INVALID':response.status===403?(response.headers.get('x-ratelimit-remaining')==='0'?'GITHUB_RATE_LIMITED':'GITHUB_PERMISSION_DENIED'):response.status===404?'GITHUB_REPOSITORY_UNAVAILABLE':'GITHUB_UPSTREAM_ERROR',operation,response.status);
  async function read(){
   const response=await githubFetch(FILE+'?ref=main',{headers:ghHeaders,cache:'no-store'});
   if(response.status===404)return {rows:[],sha:undefined};
-  if(!response.ok)throw Error('read');
+  if(!response.ok)throw upstreamFailure(response,'read');
   const file=await response.json();if(file.size>500000)throw Error('size');
   const bytes=Uint8Array.from(atob(file.content.replace(/\s/g,'')),c=>c.charCodeAt(0));
   const rows=JSON.parse(new TextDecoder().decode(bytes));if(!Array.isArray(rows))throw Error('format');
@@ -41,9 +43,9 @@ export async function handle(request,env,githubFetch=fetch){
    const content=btoa(Array.from(bytes,b=>String.fromCharCode(b)).join(''));
    const response=await githubFetch(FILE,{method:'PUT',headers:{...ghHeaders,'Content-Type':'application/json'},body:JSON.stringify({message:'Add visitor feedback',content,...(sha?{sha}:{}),branch:'main'})});
    if(response.ok)return reply([entry],201);
-   if(![409,422].includes(response.status))throw Error('write');
+   if(![409,422].includes(response.status))throw upstreamFailure(response,'write');
   }
   return reply({error:'Another message was saved first. Please try again.'},409);
- }catch{return reply({error:'Feedback is temporarily unavailable. Please try again.'},502);}
+ }catch(error){return reply({error:'Feedback is temporarily unavailable. Please try again.',code:error.safeCode||'FEEDBACK_UNAVAILABLE',...(error.operation?{operation:error.operation,upstream_status:error.upstreamStatus}:{})},502);}
 }
 export default {fetch(request,env){return handle(request,env);}};

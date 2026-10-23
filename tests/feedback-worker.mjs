@@ -18,3 +18,6 @@ fail=true;const error=await handle(post(),env,github);assert.equal(error.status,
 let created=false;
 const initial=await handle(post(),env,async(url,options)=>{if(options.method!=='PUT')return new Response('{}',{status:404});const body=JSON.parse(options.body);assert.equal(body.sha,undefined);assert.equal(JSON.parse(Buffer.from(body.content,'base64'))[0].message,'Hello · món');created=true;return Response.json({content:{sha:'new'}});});assert.equal(initial.status,201);assert.equal(created,true);
 console.log('PASS: shared-code validation, server-only credential, GitHub persistence, UTF-8, conflict retry preserving concurrent feedback, duplicate prevention, CORS, missing configuration and upstream errors. GitHub mocked.');
+
+for(const [status,code] of [[401,'GITHUB_TOKEN_INVALID'],[403,'GITHUB_PERMISSION_DENIED']]){const response=await handle(post(),env,async()=>new Response('{}',{status}));const body=await response.json();assert.equal(body.code,code);assert.equal(body.operation,'read');assert.equal(body.upstream_status,status);assert.equal(JSON.stringify(body).includes(env.GITHUB_TOKEN),false);}
+console.log('PASS: expired-token and permission-denied diagnostics contain no credentials.');
