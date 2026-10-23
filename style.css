@@ -19,3 +19,5 @@
 .feedback-card-actions{gap:6px;flex-wrap:wrap}dialog blockquote{margin:14px 0;padding:12px;border-left:3px solid var(--accent);white-space:pre-wrap;overflow-wrap:anywhere;background:var(--bg)}
 
 .calendar-activity-tools{display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0}.day-agenda .activity .body{min-width:130px}.calendar-activity-tools button{white-space:nowrap}@media(max-width:650px){.calendar-activity-tools{align-items:flex-start;flex-direction:row;flex-wrap:wrap;align-items:center}}
+
+.feedback-card.feedback-hidden{border-style:dashed;background:var(--surface)}.feedback-hidden .feedback-preview{opacity:.65}

@@ -19,7 +19,7 @@ try{feedbackReading=new Set(JSON.parse(localStorage.getItem('eel-feedback-read:'
 const feedbackIsEditor=()=>typeof token!=='undefined'&&!!token;
 function updateFeedbackBadges(){
   const editor=feedbackIsEditor();
-  const unread=feedbackRows?.filter(row=>!feedbackReading.has(row.id)).length;
+  const unread=feedbackRows?.filter(row=>!row.hidden&&!feedbackReading.has(row.id)).length;
   document.querySelectorAll('[data-feedback-unread]').forEach(b=>{b.hidden=!editor;b.textContent=unread===undefined?'Checking…':unread?`${unread} unread`:'All read';b.classList.toggle('has-unread',!!unread);});
   document.querySelectorAll('.housekeeping-unread').forEach(b=>{b.textContent=unread||'';b.hidden=!editor||!unread;});
 }
@@ -32,7 +32,8 @@ function markFeedbackRead(ids){
 }
 function renderFeedbackList(){
   const list=document.querySelector('#feedbackList');if(!list||!feedbackRows)return;
-  list.innerHTML=feedbackRows.length?[...feedbackRows].sort((a,b)=>a.created_at.localeCompare(b.created_at)).map(row=>`<article class="feedback-card"><details class="feedback-entry ${feedbackIsEditor()&&!feedbackReading.has(row.id)?'is-unread':''}" data-feedback-read="${esc(row.id)}"><summary><span class="feedback-new" ${!feedbackIsEditor()||feedbackReading.has(row.id)?'hidden':''}>New</span><span>${esc(row.name||'Anonymous')}</span><span class="meta">${esc(new Date(row.created_at).toLocaleString('en-GB'))}</span><span class="feedback-preview">${esc(row.message.slice(0,100))}</span></summary><p>${esc(row.message)}</p>${row.edited_at?`<p class="meta">Edited ${esc(new Date(row.edited_at).toLocaleString('en-GB'))}</p>`:''}</details>${typeof token!=='undefined'&&token?`<div class="feedback-card-actions"><button type="button" class="small" data-feedback-mark-read="${esc(row.id)}" ${feedbackReading.has(row.id)?'disabled':''}>${feedbackReading.has(row.id)?'Read':'Mark as read'}</button><button type="button" class="small" data-edit-feedback="${esc(row.id)}">Edit feedback</button><button type="button" class="small danger" data-delete-feedback="${esc(row.id)}">Delete feedback</button></div>`:''}</article>`).join(''):'<p class="meta">No feedback yet.</p>';
+  const visibleRows=feedbackRows.filter(row=>feedbackIsEditor()||!row.hidden);
+  list.innerHTML=visibleRows.length?[...visibleRows].sort((a,b)=>a.created_at.localeCompare(b.created_at)).map(row=>`<article class="feedback-card ${row.hidden?'feedback-hidden':''}"><details class="feedback-entry ${feedbackIsEditor()&&!feedbackReading.has(row.id)?'is-unread':''}" data-feedback-read="${esc(row.id)}"><summary>${row.hidden?'<span class="badge">Hidden</span>':''}<span class="feedback-new" ${!feedbackIsEditor()||feedbackReading.has(row.id)?'hidden':''}>New</span><span>${esc(row.name||'Anonymous')}</span><span class="meta">${esc(new Date(row.created_at).toLocaleString('en-GB'))}</span><span class="feedback-preview">${esc(row.message.slice(0,100))}</span></summary><p>${esc(row.message)}</p>${row.edited_at?`<p class="meta">Edited ${esc(new Date(row.edited_at).toLocaleString('en-GB'))}</p>`:''}</details>${typeof token!=='undefined'&&token?`<div class="feedback-card-actions"><button type="button" class="small" data-feedback-mark-read="${esc(row.id)}" ${feedbackReading.has(row.id)?'disabled':''}>${feedbackReading.has(row.id)?'Read':'Mark as read'}</button><button type="button" class="small" data-edit-feedback="${esc(row.id)}">Edit feedback</button><button type="button" class="small" data-visibility-feedback="${esc(row.id)}">${row.hidden?'Show feedback':'Hide feedback'}</button><button type="button" class="small danger" data-delete-feedback="${esc(row.id)}">Delete feedback</button></div>`:''}</article>`).join(''):'<p class="meta">No feedback yet.</p>';
   updateFeedbackBadges();
 }
 function feedbackPanel(){
@@ -58,6 +59,7 @@ document.addEventListener('click',event=>{
   if(event.target.closest('[data-feedback-mark-all]'))markFeedbackRead((feedbackRows||[]).map(row=>row.id));
   const read=event.target.closest('[data-feedback-mark-read]');if(read)markFeedbackRead([read.dataset.feedbackMarkRead]);
   if(event.target.closest('[data-feedback-refresh]'))loadFeedback();
+  const visibility=event.target.closest('[data-visibility-feedback]');if(visibility&&typeof feedbackEditForm==='function'){const row=feedbackRows?.find(row=>row.id===visibility.dataset.visibilityFeedback);if(row)feedbackEditForm(row.id,false,!row.hidden);}
   const remove=event.target.closest('[data-delete-feedback]');if(remove&&typeof feedbackEditForm==='function')feedbackEditForm(remove.dataset.deleteFeedback,true);
   const edit=event.target.closest('[data-edit-feedback]');if(edit&&typeof feedbackEditForm==='function')feedbackEditForm(edit.dataset.editFeedback);
 });

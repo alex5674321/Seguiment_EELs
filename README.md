@@ -118,3 +118,5 @@ load();
 loadFeedback();
 
 In **Edit mode**, each feedback card also has **Delete**. Confirm the dialog to remove the message from GitHub and the inbox. Cancel leaves it unchanged; failed saves keep the message. Concurrent visitor submissions are preserved. Earlier versions remain in Git history. Visitors using the shared feedback code cannot delete messages.
+
+Editors can choose **Hide feedback** to remove a card from visitor views without deleting its stored message. Hidden cards remain visible in Edit mode with a **Hidden** label and **Show feedback** restores them. Hiding is a display preference, not private storage: the repository and feedback API remain public.

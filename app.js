@@ -36,12 +36,14 @@ document.addEventListener('dragover',e=>{if(draggedProject&&token&&!busy&&e.targ
 document.addEventListener('drop',e=>{const card=e.target.closest('[data-project-card]'),column=e.target.closest('[data-state-column]');if((!card&&!column)||!draggedProject)return;e.preventDefault();const id=draggedProject;draggedProject=null;if(column)setTaskState(id,column.dataset.stateColumn);else moveProject(id,card.dataset.projectCard);});
 document.addEventListener('dragend',()=>{draggedProject=null;});
 function isDescendant(id,ancestor){if(!ancestor)return false;const seen=new Set();let p=data.projects.find(x=>x.id===id);while(p?.parent&&!seen.has(p.id)){seen.add(p.id);if(p.parent===ancestor)return true;p=data.projects.find(x=>x.id===p.parent);}return false;}
-function feedbackEditForm(id,deleting=false){
+function feedbackEditForm(id,deleting=false,hidden=null){
   if(!token||busy)return;
   const original=feedbackRows?.find(row=>row.id===id);if(!original)return;
-  openForm(deleting?'Delete feedback':'Edit feedback',deleting?`<p>Delete this feedback message? It will be removed from the inbox.</p><blockquote>${esc(original.message)}</blockquote>`:input('Name','name','text',original.name||'','maxlength="80"')+textarea('Feedback','message',original.message),async form=>{
-    const name=deleting?'':form.get('name').trim(),message=deleting?'':form.get('message').trim();
-    if(!deleting&&(!message||message.length>2000||name.length>80))throw Error('Feedback must contain 1–2000 characters; name must be at most 80 characters.');
+  const visibilityChange=typeof hidden==='boolean';
+  const actionLabel=deleting?'Delete':visibilityChange?(hidden?'Hide':'Show'):'Save';
+  openForm(deleting?'Delete feedback':visibilityChange?actionLabel+' feedback':'Edit feedback',visibilityChange?`<p>${hidden?'Hide this message from the public feedback cards? It remains in GitHub.':'Show this feedback message to visitors again?'}</p><blockquote>${esc(original.message)}</blockquote>`:deleting?`<p>Delete this feedback message? It will be removed from the inbox.</p><blockquote>${esc(original.message)}</blockquote>`:input('Name','name','text',original.name||'','maxlength="80"')+textarea('Feedback','message',original.message),async form=>{
+    const name=deleting||visibilityChange?'':form.get('name').trim(),message=deleting||visibilityChange?'':form.get('message').trim();
+    if(!deleting&&!visibilityChange&&(!message||message.length>2000||name.length>80))throw Error('Feedback must contain 1–2000 characters; name must be at most 80 characters.');
     busy=true;status('Saving feedback…');
     try{
       const endpoint=`https://api.github.com/repos/${REPO}/contents/data/feedback.json`;
@@ -53,13 +55,13 @@ function feedbackEditForm(id,deleting=false){
         const rows=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(file.content.replace(/\s/g,'')),c=>c.charCodeAt(0))));
         if(!Array.isArray(rows))throw Error('Invalid feedback file.');
         const current=rows.find(row=>row.id===id);
-        if(!current||['id','name','message','created_at','edited_at'].some(key=>(current[key]??'')!==(original[key]??''))){
+        if(!current||['id','name','message','created_at','edited_at','hidden'].some(key=>(current[key]??'')!==(original[key]??''))){
           feedbackRows=rows.slice(-50);renderFeedbackList();
           throw Error('This feedback changed or was removed. The latest version has been loaded; reopen it before editing.');
         }
-        const updated=deleting?rows.filter(row=>row.id!==id):rows.map(row=>row.id===id?{...row,name,message,edited_at:new Date().toISOString()}:row);
+        const updated=deleting?rows.filter(row=>row.id!==id):rows.map(row=>row.id===id?(visibilityChange?{...row,hidden,edited_at:new Date().toISOString()}:{...row,name,message,edited_at:new Date().toISOString()}):row);
         const content=btoa(Array.from(new TextEncoder().encode(JSON.stringify(updated,null,2)+'\n'),b=>String.fromCharCode(b)).join(''));
-        const saved=await fetch(endpoint,{method:'PUT',headers:{...headers,'Content-Type':'application/json'},body:JSON.stringify({message:deleting?'Delete visitor feedback':'Edit visitor feedback',content,sha:file.sha,branch:'main'})});
+        const saved=await fetch(endpoint,{method:'PUT',headers:{...headers,'Content-Type':'application/json'},body:JSON.stringify({message:deleting?'Delete visitor feedback':visibilityChange?actionLabel+' visitor feedback':'Edit visitor feedback',content,sha:file.sha,branch:'main'})});
         if(saved.status===409)continue;
         if(!saved.ok)throw Error(`Feedback was not saved (${saved.status}). Check your token permissions.`);
         feedbackRows=updated.slice(-50);renderFeedbackList();status(deleting?'Feedback deleted from GitHub ✓':'Feedback saved to GitHub ✓');return true;
@@ -67,7 +69,7 @@ function feedbackEditForm(id,deleting=false){
       throw Error('Other feedback is being saved. Please try again.');
     }catch(error){status('Feedback changes not saved');throw error;}
     finally{busy=false;}
-  },deleting?'Delete':'Save');
+  },actionLabel);
 }
 function noteForm(id){const n=data.notes.find(x=>x.id===id);openForm(n?'Edit note':'Add note',textarea('Note','text',n?.text||''),async f=>{const text=f.get('text').trim();if(!text)throw Error('Enter a note.');return save(d=>{if(n)d.notes=d.notes.map(x=>x.id===id?{...x,text}:x);else d.notes.push({id:uid(),text,done:false});});});}
 async function remove(kind,id){if(!token)return;openForm('Confirm deletion','<p>This item will be deleted from the diary. '+(kind==='projects'?'Activities will be kept without this task; subtasks will move to the top level.':'')+'</p>',()=>save(d=>{d[kind]=d[kind].filter(x=>x.id!==id);if(kind==='projects'){d.events.forEach(e=>{if(e.project===id)e.project='';});d.projects.forEach(p=>{if(p.parent===id)p.parent='';});selectedProject=null;}}),'Delete');}
