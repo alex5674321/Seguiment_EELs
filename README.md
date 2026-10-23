@@ -55,3 +55,5 @@ Task cards are compact in both views. Open **Manage** on a card to change its st
 ## Visitor Feedback
 
 Housekeeping includes a separate Feedback area for visitors using the shared code `AlexEELs`, without a GitHub account or the diary editor token. It requires an external storage connection; until then, the UI clearly indicates that messages cannot be saved. See [FEEDBACK_SETUP.md](FEEDBACK_SETUP.md) to connect the GitHub-backed feedback service.
+
+Weekly cards and activity lists use chronological order: oldest first, newest last, with same-day activities ordered by start time. Public feedback is also displayed oldest first within the latest 50 messages. Manual task order remains controlled by drag handles and arrows.

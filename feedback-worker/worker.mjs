@@ -20,7 +20,7 @@ export async function handle(request,env,githubFetch=fetch){
   return {rows,sha:file.sha};
  }
  try{
-  if(request.method==='GET'){const {rows}=await read();return reply(rows.slice(-50).reverse());}
+  if(request.method==='GET'){const {rows}=await read();return reply(rows.slice(-50));}
   if(!request.headers.get('Content-Type')?.startsWith('application/json'))return reply({error:'JSON required'},415);
   let payload;
   const reader=request.body?.getReader();if(!reader)return reply({error:'Body required'},400);

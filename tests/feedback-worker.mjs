@@ -10,7 +10,7 @@ assert.equal((await handle(post('wrong'),env,github)).status,403);assert.equal(c
 assert.equal((await handle(post('AlexEELs',{feedback:' '}),env,github)).status,400);
 conflict=true;const saved=await handle(post(),env,github);assert.equal(saved.status,201);assert.equal(rows.length,2);assert.equal(rows[1].message,'Hello · món');assert.equal(rows[0].id,'peer');assert.equal(JSON.stringify(rows).includes('AlexEELs'),false);
 assert.equal((await handle(post(),env,github)).status,200);assert.equal(rows.length,2);
-const listed=await handle(new Request('https://feedback.example/feedback'),env,github);assert.equal((await listed.json())[0].id,id);
+const listed=await handle(new Request('https://feedback.example/feedback'),env,github);assert.equal((await listed.json()).at(-1).id,id);
 assert.equal((await handle(new Request('https://feedback.example/feedback',{headers:{Origin:'https://other.example'}}),env,github)).status,403);
 assert.equal((await handle(new Request('https://feedback.example/feedback',{method:'OPTIONS',headers:{Origin:env.ALLOWED_ORIGIN}}),env,github)).status,204);
 assert.equal((await handle(post(),{},github)).status,503);

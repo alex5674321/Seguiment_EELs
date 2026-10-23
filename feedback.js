@@ -17,7 +17,7 @@ async function loadFeedback(){
     if(!response.ok)throw Error('Feedback could not be loaded. Please try again later.');
     const rows=await response.json();if(!Array.isArray(rows))throw Error('Invalid feedback response.');
     if(!list.isConnected)return;
-    list.innerHTML=rows.length?rows.map(row=>`<article class="feedback-entry"><div class="meta">${esc(row.name||'Anonymous')} · ${esc(new Date(row.created_at).toLocaleString('en-GB'))}</div><p>${esc(row.message)}</p></article>`).join(''):'<p class="meta">No feedback yet. Be the first to share a thought.</p>';
+    list.innerHTML=rows.length?[...rows].sort((a,b)=>a.created_at.localeCompare(b.created_at)).map(row=>`<article class="feedback-entry"><div class="meta">${esc(row.name||'Anonymous')} · ${esc(new Date(row.created_at).toLocaleString('en-GB'))}</div><p>${esc(row.message)}</p></article>`).join(''):'<p class="meta">No feedback yet. Be the first to share a thought.</p>';
   }catch(error){if(list.isConnected)list.textContent=error.message;}
 }
 document.addEventListener('input',event=>{
