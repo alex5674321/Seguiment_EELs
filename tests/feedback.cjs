@@ -4,7 +4,7 @@ const assert=require('node:assert/strict');
  const browser=await chromium.launch({headless:true,executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium'});
  const page=await browser.newPage({viewport:{width:390,height:844}});const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.route('https://api.github.com/**',route=>route.fulfill({status:503,json:{message:'offline'}}));
- await page.route('**/feedback-config.js*',route=>route.fulfill({contentType:'text/javascript',body:"window.FEEDBACK_CONFIG={endpoint:''};"}));await page.goto('http://127.0.0.1:8000');await page.locator('nav [data-view="housekeeping"]').click();assert.match(await page.locator('.feedback-setup').innerText(),/not connected/);assert.equal(await page.locator('#feedbackForm').count(),0);
+ await page.route('**/feedback-config.js*',route=>route.fulfill({contentType:'text/javascript',body:"window.FEEDBACK_CONFIG={endpoint:''};"}));await page.goto('http://127.0.0.1:8000');await page.locator('nav [data-view="housekeeping"]').click();assert.match(await page.locator('.feedback-setup').innerText(),/not connected/);assert.equal(await page.locator('#feedbackCode').isVisible(),true);assert.equal(await page.locator('#feedbackForm button').isDisabled(),true);
  await page.route('**/feedback-config.js*',route=>route.fulfill({contentType:'text/javascript',body:"window.FEEDBACK_CONFIG={endpoint:'https://test-feedback.workers.dev/feedback'};"}));
  let rows=[],fail=false;
  await page.route('https://test-feedback.workers.dev/**',route=>{const req=route.request();assert.equal(req.headers().apikey,undefined);assert.equal(req.headers().authorization,undefined);

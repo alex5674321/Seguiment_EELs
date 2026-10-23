@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="dark"><meta name="theme-color" content="#11161a">
+<title>Feedback · EEL Journal</title>
+<link rel="stylesheet" href="style.css?v=20261023-feedback3">
+<script src="feedback-config.js?v=20261023-feedback3" defer></script>
+<script src="feedback.js?v=20261023-feedback3" defer></script>
+<script src="feedback-page.js?v=20261023-feedback3" defer></script>
+</head>
+<body><main class="feedback-standalone">
+<p><a href="index.html">← Back to journal</a></p><h1>Feedback</h1>
+<section class="panel feedback-section">
+<p>Enter the shared access code and leave your message. You do not need Edit mode or a GitHub account.</p>
+<p class="meta">Messages are public. Please avoid personal information.</p>
+<form id="feedbackForm" method="post">
+<label for="feedbackCode">Access code</label><input id="feedbackCode" name="code" type="password" required autocomplete="off" placeholder="Enter the shared code">
+<label for="feedbackName">Name (optional)</label><input id="feedbackName" name="name" maxlength="80" autocomplete="nickname">
+<label for="feedbackMessage">Your feedback</label><textarea id="feedbackMessage" name="message" maxlength="2000" required placeholder="What would you like to share?"></textarea>
+<button class="primary" disabled>Send feedback</button><p id="feedbackStatus" role="status">Connecting to feedback…</p>
+</form>
+<noscript>Enable JavaScript to send feedback.</noscript>
+<div id="feedbackList" aria-label="Public feedback"></div>
+</section></main></body></html>
