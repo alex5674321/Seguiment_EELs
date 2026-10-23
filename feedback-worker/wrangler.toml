@@ -1,0 +1,7 @@
+name = "eel-feedback"
+main = "worker.mjs"
+compatibility_date = "2026-10-23"
+
+[vars]
+ALLOWED_ORIGIN = "https://alex5674321.github.io"
+# Configure GITHUB_TOKEN and FEEDBACK_CODE as encrypted secrets, never here.

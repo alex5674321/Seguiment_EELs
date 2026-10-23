@@ -1,31 +1,19 @@
 'use strict';
 let feedbackBusy=false;
 const feedbackDraft={name:'',message:''};
+let feedbackRequestId=crypto.randomUUID();
 function feedbackConnection(){
-  const config=window.FEEDBACK_CONFIG||{};
-  if(!config.url||!config.publicKey)return null;
-  try{
-    const url=new URL(config.url);
-    if(url.protocol!=='https:'||!url.hostname.endsWith('.supabase.co')||url.username||url.password)return null;
-    if(config.publicKey.startsWith('sb_secret_'))return null;
-    if(config.publicKey.startsWith('eyJ')){
-      const payload=JSON.parse(atob(config.publicKey.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
-      if(payload.role!=='anon')return null;
-    }else if(!config.publicKey.startsWith('sb_publishable_'))return null;
-    const headers={apikey:config.publicKey,'Content-Type':'application/json'};
-    if(config.publicKey.startsWith('eyJ'))headers.Authorization=`Bearer ${config.publicKey}`;
-    return {endpoint:url.origin+'/rest/v1/journal_feedback',headers};
-  }catch{return null;}
+  try{const url=new URL(window.FEEDBACK_CONFIG?.endpoint);if(url.protocol!=='https:'||url.username||url.password)return null;return {endpoint:url.href,headers:{'Content-Type':'application/json'}};}catch{return null;}
 }
 function feedbackPanel(){
   const ready=!!feedbackConnection();
-  return `<section class="panel feedback-section"><div class="section-head"><h2>Feedback</h2><span class="badge">Open to everyone</span></div><p class="meta">Leave a suggestion, question or comment. Enter the shared access code to post. No GitHub account required. Messages are public; please avoid personal information.</p>${ready?`<form id="feedbackForm"><label for="feedbackCode">Access code</label><input id="feedbackCode" name="code" type="password" required autocomplete="off"><label for="feedbackName">Name (optional)</label><input id="feedbackName" name="name" maxlength="80" autocomplete="nickname" value="${esc(feedbackDraft.name)}"><label for="feedbackMessage">Your feedback</label><textarea id="feedbackMessage" name="message" maxlength="2000" required placeholder="What would you like to share?">${esc(feedbackDraft.message)}</textarea><button class="primary" ${feedbackBusy?'disabled':''}>${feedbackBusy?'Sending…':'Send feedback'}</button><p id="feedbackStatus" role="status"></p></form><div id="feedbackList" aria-label="Public feedback"><p class="meta">Loading feedback…</p></div>`:'<p class="feedback-setup" role="status">Anonymous feedback is not connected yet. Messages cannot be saved until the site owner connects Supabase.</p>'}</section>`;
+  return `<section class="panel feedback-section"><div class="section-head"><h2>Feedback</h2><span class="badge">Open to everyone</span></div><p class="meta">Leave a suggestion, question or comment. Enter the shared access code to post. No GitHub account required. Messages are public; please avoid personal information.</p>${ready?`<form id="feedbackForm"><label for="feedbackCode">Access code</label><input id="feedbackCode" name="code" type="password" required autocomplete="off"><label for="feedbackName">Name (optional)</label><input id="feedbackName" name="name" maxlength="80" autocomplete="nickname" value="${esc(feedbackDraft.name)}"><label for="feedbackMessage">Your feedback</label><textarea id="feedbackMessage" name="message" maxlength="2000" required placeholder="What would you like to share?">${esc(feedbackDraft.message)}</textarea><button class="primary" ${feedbackBusy?'disabled':''}>${feedbackBusy?'Sending…':'Send feedback'}</button><p id="feedbackStatus" role="status"></p></form><div id="feedbackList" aria-label="Public feedback"><p class="meta">Loading feedback…</p></div>`:'<p class="feedback-setup" role="status">Anonymous feedback is not connected yet. Messages cannot be saved until the site owner connects the feedback service.</p>'}</section>`;
 }
 async function loadFeedback(){
   const connection=feedbackConnection(),list=document.querySelector('#feedbackList');
   if(!connection||!list)return;
   try{
-    const response=await fetch(connection.endpoint+'?select=id,name,message,created_at&order=created_at.desc&limit=50',{headers:connection.headers,cache:'no-store'});
+    const response=await fetch(connection.endpoint,{headers:connection.headers,cache:'no-store'});
     if(!response.ok)throw Error('Feedback could not be loaded. Please try again later.');
     const rows=await response.json();if(!Array.isArray(rows))throw Error('Invalid feedback response.');
     if(!list.isConnected)return;
@@ -45,10 +33,11 @@ document.addEventListener('submit',async event=>{
   if(!message||message.length>2000||name.length>80){output.textContent='Enter feedback between 1 and 2000 characters.';return;}
   feedbackBusy=true;button.disabled=true;output.textContent='Sending…';
   try{
-    const response=await fetch(connection.endpoint.replace('/journal_feedback','/rpc/submit_journal_feedback'),{method:'POST',headers:{...connection.headers,Prefer:'return=representation'},body:JSON.stringify({visitor_code:code,author:name,feedback:message})});
-    if(!response.ok)throw Error(response.status===403?'Incorrect access code. Feedback was not saved.':'Feedback was not saved. Check the access code and try again.');
+    const response=await fetch(connection.endpoint,{method:'POST',headers:connection.headers,body:JSON.stringify({id:feedbackRequestId,visitor_code:code,author:name,feedback:message})});
+    if(response.status===409)feedbackRequestId=crypto.randomUUID();
+    if(!response.ok)throw Error(response.status===409?'Feedback was not saved. Please press Send again.':response.status===403?'Incorrect access code. Feedback was not saved.':'Feedback was not saved. Please try again later.');
     const rows=await response.json();if(!Array.isArray(rows)||!rows[0]?.id)throw Error('Save could not be confirmed. Refresh the feedback before sending again.');
-    feedbackDraft.name='';feedbackDraft.message='';form.reset();output.textContent='Feedback saved. Thank you!';await loadFeedback();
+    feedbackRequestId=crypto.randomUUID();feedbackDraft.name='';feedbackDraft.message='';form.reset();output.textContent='Feedback saved. Thank you!';await loadFeedback();
   }catch(error){output.textContent=error.message;}
   finally{feedbackBusy=false;button.disabled=false;}
 });
