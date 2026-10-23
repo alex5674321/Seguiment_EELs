@@ -12,21 +12,52 @@ async function feedbackResponseError(response){
   return messages[body?.code]||feedbackServiceError(response.status);
 }
 function feedbackRequestError(error){if(error.name==='TimeoutError'||error.name==='AbortError')return 'Feedback took too long to respond. Check your connection and try again; your message is kept.';if(error instanceof TypeError)return 'Cannot reach the feedback service. Check your connection. The site owner should also check the Worker URL and allowed origin.';return error.message;}
+let feedbackRows=null;
+let feedbackInboxOpen=false;
+let feedbackReading=new Set();
+try{feedbackReading=new Set(JSON.parse(localStorage.getItem('eel-feedback-read:'+window.FEEDBACK_CONFIG?.endpoint)||'[]'));}catch{}
+function updateFeedbackBadges(){
+  const unread=feedbackRows?.filter(row=>!feedbackReading.has(row.id)).length;
+  document.querySelectorAll('[data-feedback-unread]').forEach(b=>{b.textContent=unread===undefined?'Checking…':unread?`${unread} unread`:'All read';b.classList.toggle('has-unread',!!unread);});
+  document.querySelectorAll('.housekeeping-unread').forEach(b=>{b.textContent=unread||'';b.hidden=!unread;});
+}
+function markFeedbackRead(ids){
+  ids.forEach(id=>feedbackReading.add(id));
+  try{localStorage.setItem('eel-feedback-read:'+window.FEEDBACK_CONFIG?.endpoint,JSON.stringify([...feedbackReading].slice(-2000)));}catch{}
+  document.querySelectorAll('[data-feedback-read]').forEach(entry=>{const read=feedbackReading.has(entry.dataset.feedbackRead);entry.classList.toggle('is-unread',!read);const badge=entry.querySelector('.feedback-new');if(badge)badge.hidden=read;});
+  updateFeedbackBadges();
+}
+function renderFeedbackList(){
+  const list=document.querySelector('#feedbackList');if(!list||!feedbackRows)return;
+  list.innerHTML=feedbackRows.length?[...feedbackRows].sort((a,b)=>a.created_at.localeCompare(b.created_at)).map(row=>`<details class="feedback-entry ${feedbackReading.has(row.id)?'':'is-unread'}" data-feedback-read="${esc(row.id)}"><summary><span class="feedback-new" ${feedbackReading.has(row.id)?'hidden':''}>New</span><span>${esc(row.name||'Anonymous')}</span><span class="meta">${esc(new Date(row.created_at).toLocaleString('en-GB'))}</span><span class="feedback-preview">${esc(row.message.slice(0,100))}</span></summary><p>${esc(row.message)}</p></details>`).join(''):'<p class="meta">No feedback yet.</p>';
+  updateFeedbackBadges();
+}
 function feedbackPanel(){
   const ready=!!feedbackConnection();
-  return `<section class="panel feedback-section"><div class="section-head"><h2>Feedback</h2><span class="badge">Open to everyone</span></div><p class="meta">Leave a suggestion, question or comment. Enter the shared access code to post. No GitHub account required. Messages are public; please avoid personal information.</p><form id="feedbackForm"><label for="feedbackCode">Access code</label><input id="feedbackCode" name="code" type="password" required autocomplete="off"><label for="feedbackName">Name (optional)</label><input id="feedbackName" name="name" maxlength="80" autocomplete="nickname" value="${esc(feedbackDraft.name)}"><label for="feedbackMessage">Your feedback</label><textarea id="feedbackMessage" name="message" maxlength="2000" required placeholder="What would you like to share?">${esc(feedbackDraft.message)}</textarea><button class="primary" ${feedbackBusy||!ready?'disabled':''}>${feedbackBusy?'Sending…':'Send feedback'}</button><p id="feedbackStatus" role="status"></p></form><div id="feedbackList" aria-label="Public feedback"><p class="meta">${ready?'Loading feedback…':'Feedback service is not configured.'}</p></div>${ready?'':`<p class="feedback-setup" role="status">Anonymous feedback is not connected yet. Messages cannot be saved until the site owner connects the feedback service.</p>`}</section>`;
+  return `<section class="panel feedback-section feedback-inbox-panel"><details id="feedbackInbox" ${feedbackInboxOpen?'open':''}><summary class="feedback-inbox-heading"><strong>Feedback inbox</strong><span class="badge" data-feedback-unread>Checking…</span><span class="meta">Open to read messages</span></summary><div class="feedback-inbox-actions"><button type="button" class="small" data-feedback-refresh>Refresh feedback</button><button type="button" class="small" data-feedback-mark-all>Mark all as read</button></div><p class="meta">Read status is saved in this browser.</p><div id="feedbackList" aria-label="Public feedback"><p class="meta">${ready?'Loading feedback…':'Feedback service is not configured.'}</p></div></details><details class="feedback-compose"><summary>Leave feedback</summary><p class="meta">Enter the shared access code to post. Messages are public.</p><form id="feedbackForm"><label for="feedbackCode">Access code</label><input id="feedbackCode" name="code" type="password" required autocomplete="off"><label for="feedbackName">Name (optional)</label><input id="feedbackName" name="name" maxlength="80" autocomplete="nickname" value="${esc(feedbackDraft.name)}"><label for="feedbackMessage">Your feedback</label><textarea id="feedbackMessage" name="message" maxlength="2000" required placeholder="What would you like to share?">${esc(feedbackDraft.message)}</textarea><button class="primary" ${feedbackBusy||!ready?'disabled':''}>${feedbackBusy?'Sending…':'Send feedback'}</button><p id="feedbackStatus" role="status"></p></form></details>${ready?'':`<p class="feedback-setup" role="status">Feedback is not connected yet. Messages cannot be saved until the site owner connects the feedback service.</p>`}</section>`;
 }
+let feedbackLoading=null;
 async function loadFeedback(){
-  const connection=feedbackConnection(),list=document.querySelector('#feedbackList');
-  if(!connection||!list)return;
-  try{
+  const connection=feedbackConnection();if(!connection)return;
+  if(feedbackLoading)return feedbackLoading;
+  feedbackLoading=(async()=>{try{
     const response=await fetch(connection.endpoint,{cache:'no-store',signal:AbortSignal.timeout(15000)});
     if(!response.ok)throw Error(await feedbackResponseError(response));
-    const rows=await response.json();if(!Array.isArray(rows))throw Error('Invalid feedback response.');
-    if(!list.isConnected)return;
-    list.innerHTML=rows.length?[...rows].sort((a,b)=>a.created_at.localeCompare(b.created_at)).map(row=>`<article class="feedback-entry"><div class="meta">${esc(row.name||'Anonymous')} · ${esc(new Date(row.created_at).toLocaleString('en-GB'))}</div><p>${esc(row.message)}</p></article>`).join(''):'<p class="meta">No feedback yet. Be the first to share a thought.</p>';
-  }catch(error){if(list.isConnected)list.textContent=feedbackRequestError(error);}
+    const rows=await response.json();if(!Array.isArray(rows)||rows.some(row=>typeof row.id!=='string'||typeof row.message!=='string'||typeof row.created_at!=='string'))throw Error('Invalid feedback response.');
+    feedbackRows=rows;renderFeedbackList();updateFeedbackBadges();
+  }catch(error){const list=document.querySelector('#feedbackList');if(list)list.textContent=feedbackRequestError(error);document.querySelectorAll('[data-feedback-unread]').forEach(b=>b.textContent='Unavailable');}
+  finally{feedbackLoading=null;}})();return feedbackLoading;
 }
+document.addEventListener('toggle',event=>{
+  if(event.target.id==='feedbackInbox')feedbackInboxOpen=event.target.open;
+  if(event.target.dataset.feedbackRead&&event.target.open)markFeedbackRead([event.target.dataset.feedbackRead]);
+},true);
+document.addEventListener('click',event=>{
+  if(event.target.closest('[data-feedback-mark-all]'))markFeedbackRead((feedbackRows||[]).map(row=>row.id));
+  if(event.target.closest('[data-feedback-refresh]'))loadFeedback();
+});
+window.addEventListener('storage',event=>{if(event.key==='eel-feedback-read:'+window.FEEDBACK_CONFIG?.endpoint){try{feedbackReading=new Set(JSON.parse(event.newValue||'[]'));renderFeedbackList();}catch{}}});
+setInterval(()=>{if(document.visibilityState==='visible')loadFeedback();},60000);
 document.addEventListener('input',event=>{
   if(event.target.id==='feedbackName')feedbackDraft.name=event.target.value;
   if(event.target.id==='feedbackMessage')feedbackDraft.message=event.target.value;
