@@ -116,3 +116,5 @@ document.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.tar
 window.addEventListener('beforeunload',e=>{if(busy){e.preventDefault();e.returnValue='';}});
 load();
 loadFeedback();
+
+In **Edit mode**, each feedback card also has **Delete**. Confirm the dialog to remove the message from GitHub and the inbox. Cancel leaves it unchanged; failed saves keep the message. Concurrent visitor submissions are preserved. Earlier versions remain in Git history. Visitors using the shared feedback code cannot delete messages.
