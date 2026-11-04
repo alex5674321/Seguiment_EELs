@@ -225,6 +225,18 @@
       "minutes": 75,
       "project": "ad3306a8-836c-41d3-9669-b7e1829aa9f1",
       "description": ""
+    },
+    {
+      "id": "6d761977-b8f2-48da-a4b4-6cc0d948b8f4",
+      "type": "activity",
+      "title": "Acabar Scratch LP 26 28",
+      "date": "2026-11-01",
+      "start": "16:30",
+      "endDate": "2026-11-01",
+      "end": "18:00",
+      "minutes": 90,
+      "project": "ad3306a8-836c-41d3-9669-b7e1829aa9f1",
+      "description": ""
     }
   ],
   "notes": [],
