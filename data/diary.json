@@ -241,6 +241,18 @@
       "minutes": 90,
       "project": "ad3306a8-836c-41d3-9669-b7e1829aa9f1",
       "description": ""
+    },
+    {
+      "id": "20d96dc2-81a1-4ebc-b191-9c85d82f2533",
+      "type": "activity",
+      "title": "Posar LPs 21 23 26 28 de Scratch a docs",
+      "date": "2026-11-03",
+      "start": "23:50",
+      "endDate": "2026-11-04",
+      "end": "01:00",
+      "minutes": 70,
+      "project": "ad3306a8-836c-41d3-9669-b7e1829aa9f1",
+      "description": ""
     }
   ],
   "notes": [],
