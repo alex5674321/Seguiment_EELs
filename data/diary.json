@@ -213,6 +213,18 @@
       "minutes": 300,
       "project": "ad3306a8-836c-41d3-9669-b7e1829aa9f1",
       "description": "LP21 Aprox de perim con circulo de x líneas\nLP23 Simulació de pluja per intensitats\nLP26 Crear una estrella de fuegos artificiales\nLP28 Mesurar muchas combinaciones de dados"
+    },
+    {
+      "id": "36cc04f8-94a2-448a-9dc5-64f9b33a64c1",
+      "type": "activity",
+      "title": "Acabar Scratch de LP 21 23",
+      "date": "2026-11-01",
+      "start": "09:30",
+      "endDate": "2026-11-01",
+      "end": "10:45",
+      "minutes": 75,
+      "project": "ad3306a8-836c-41d3-9669-b7e1829aa9f1",
+      "description": ""
     }
   ],
   "notes": [],
