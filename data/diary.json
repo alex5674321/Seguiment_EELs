@@ -146,6 +146,18 @@
       "minutes": 15,
       "project": "",
       "description": ""
+    },
+    {
+      "id": "0c8c58cd-d72e-433f-99a4-b08555444f4b",
+      "type": "activity",
+      "title": "Examinar Formats LPs Sonia (Cross-examination)",
+      "date": "2026-10-25",
+      "start": "00:15",
+      "endDate": "2026-10-25",
+      "end": "02:00",
+      "minutes": 105,
+      "project": "da72c26c-dfb2-476b-a207-9206ca9279eb",
+      "description": ""
     }
   ],
   "notes": [],
