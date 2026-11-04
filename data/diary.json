@@ -122,6 +122,18 @@
       "minutes": 60,
       "project": "",
       "description": ""
+    },
+    {
+      "id": "e9e1bd95-4873-4e5c-acdf-d60b482db3b1",
+      "type": "activity",
+      "title": "Mudanza Part2",
+      "date": "2026-10-23",
+      "start": "09:30",
+      "endDate": "2026-10-23",
+      "end": "12:30",
+      "minutes": 180,
+      "project": "396d9654-a65d-46aa-9039-6eb9ff66065f",
+      "description": ""
     }
   ],
   "notes": [],
