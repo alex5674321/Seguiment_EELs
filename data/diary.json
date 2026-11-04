@@ -272,6 +272,18 @@
       "minutes": 120,
       "project": "ad3306a8-836c-41d3-9669-b7e1829aa9f1",
       "description": "LP10\nLP14\nLP20"
+    },
+    {
+      "id": "357064f0-a0a3-4751-94db-e906deee9703",
+      "type": "activity",
+      "title": "Fer format conjunt de LPs Marian",
+      "date": "2026-11-04",
+      "start": "10:45",
+      "endDate": "2026-11-04",
+      "end": "13:10",
+      "minutes": 145,
+      "project": "9b2482b0-2ea9-4f0a-b432-e7fc993d1a61",
+      "description": ""
     }
   ],
   "notes": [],
