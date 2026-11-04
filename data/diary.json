@@ -177,6 +177,18 @@
       "minutes": 120,
       "project": "da72c26c-dfb2-476b-a207-9206ca9279eb",
       "description": ""
+    },
+    {
+      "id": "d734b578-0b29-4e93-a34c-fdcd888ba9cb",
+      "type": "activity",
+      "title": "Pensar i crear amb Scratch LPs TechExten",
+      "date": "2026-10-27",
+      "start": "10:00",
+      "endDate": "2026-10-27",
+      "end": "12:30",
+      "minutes": 150,
+      "project": "ad3306a8-836c-41d3-9669-b7e1829aa9f1",
+      "description": ""
     }
   ],
   "notes": [],
