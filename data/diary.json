@@ -134,6 +134,18 @@
       "minutes": 180,
       "project": "396d9654-a65d-46aa-9039-6eb9ff66065f",
       "description": ""
+    },
+    {
+      "id": "abc8f2c3-c7d6-4fa5-929c-fdf1a25597c2",
+      "type": "meeting",
+      "title": "Petita reunió",
+      "date": "2026-10-30",
+      "start": "10:38",
+      "endDate": "2026-10-30",
+      "end": "10:45",
+      "minutes": 7,
+      "project": "",
+      "description": ""
     }
   ],
   "notes": [],
