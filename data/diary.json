@@ -158,6 +158,18 @@
       "minutes": 105,
       "project": "da72c26c-dfb2-476b-a207-9206ca9279eb",
       "description": ""
+    },
+    {
+      "id": "37dd45c7-e6a4-47ba-b9b9-ca4eb949b517",
+      "type": "activity",
+      "title": "Examinar Format LPs Meves",
+      "date": "2026-10-26",
+      "start": "10:00",
+      "endDate": "2026-10-26",
+      "end": "12:00",
+      "minutes": 120,
+      "project": "da72c26c-dfb2-476b-a207-9206ca9279eb",
+      "description": ""
     }
   ],
   "notes": [],
