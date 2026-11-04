@@ -189,6 +189,18 @@
       "minutes": 150,
       "project": "ad3306a8-836c-41d3-9669-b7e1829aa9f1",
       "description": ""
+    },
+    {
+      "id": "addcea9e-dae8-46a3-8cc9-c8572d9f2818",
+      "type": "activity",
+      "title": "Pensar i crear amb Scratch LPs TechExten",
+      "date": "2026-10-28",
+      "start": "10:30",
+      "endDate": "2026-10-28",
+      "end": "12:00",
+      "minutes": 90,
+      "project": "ad3306a8-836c-41d3-9669-b7e1829aa9f1",
+      "description": "LP21 Aprox de perim con circulo de x líneas\nLP23 Simulació de pluja per intensitats\nLP26 Crear una estrella de fuegos artificiales\nLP28 Mesurar muchas combinaciones de dados"
     }
   ],
   "notes": [],
