@@ -40,7 +40,8 @@
       "end": "11:00",
       "minutes": 120,
       "project": "",
-      "description": "Reunió inicial per parlar de com anirá tot, visita per CIRS i Parc Tecnologic"
+      "description": "Reunió inicial per parlar de com anirá tot, visita per CIRS i Parc Tecnologic",
+      "type": "meeting"
     },
     {
       "id": "46b3489b-d673-4a8d-b150-0c6a6d31ec9c",
