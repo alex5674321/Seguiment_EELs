@@ -140,10 +140,10 @@
       "type": "meeting",
       "title": "Petita reunió",
       "date": "2026-10-30",
-      "start": "10:38",
+      "start": "10:30",
       "endDate": "2026-10-30",
       "end": "10:45",
-      "minutes": 7,
+      "minutes": 15,
       "project": "",
       "description": ""
     }
