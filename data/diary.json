@@ -131,7 +131,8 @@
       "end": "11:30",
       "minutes": 60,
       "project": "",
-      "description": ""
+      "description": "",
+      "type": "meeting"
     },
     {
       "id": "e9e1bd95-4873-4e5c-acdf-d60b482db3b1",
