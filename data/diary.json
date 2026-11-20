@@ -51,8 +51,8 @@
       "date": "2026-10-14",
       "start": "09:00",
       "endDate": "2026-10-14",
-      "end": "11:00",
-      "minutes": 120,
+      "end": "11:20",
+      "minutes": 140,
       "project": "",
       "description": "Reunió inicial per parlar de com anirá tot, visita per CIRS i Parc Tecnologic",
       "type": "meeting"
