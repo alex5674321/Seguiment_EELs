@@ -280,8 +280,8 @@
       "date": "2026-11-02",
       "start": "10:00",
       "endDate": "2026-11-02",
-      "end": "12:00",
-      "minutes": 120,
+      "end": "12:30",
+      "minutes": 150,
       "project": "ad3306a8-836c-41d3-9669-b7e1829aa9f1",
       "description": "LP10\nLP14\nLP20"
     },
