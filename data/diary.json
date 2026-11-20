@@ -87,10 +87,11 @@
       "date": "2026-10-16",
       "start": "17:00",
       "endDate": "2026-10-16",
-      "end": "19:00",
-      "minutes": 120,
+      "end": "21:00",
+      "minutes": 240,
       "project": "d9c8e42f-87df-4d17-a6c0-e0f8500e896b",
-      "description": ""
+      "description": "",
+      "type": "activity"
     },
     {
       "id": "1630e87f-1a36-49c7-8c1a-7708d8cb0cf4",
