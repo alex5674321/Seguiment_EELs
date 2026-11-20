@@ -119,12 +119,12 @@
     },
     {
       "id": "92d708d2-85de-4a7d-b3da-ee128d4bbd51",
-      "title": "Revisió LPs part 1",
+      "title": "Revisió LPs",
       "date": "2026-10-19",
       "start": "10:00",
       "endDate": "2026-10-19",
-      "end": "12:20",
-      "minutes": 140,
+      "end": "12:30",
+      "minutes": 150,
       "project": "da72c26c-dfb2-476b-a207-9206ca9279eb",
       "description": "",
       "type": "activity"
