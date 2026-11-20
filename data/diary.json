@@ -351,6 +351,18 @@
       "minutes": 105,
       "project": "d0d057bb-6983-41b3-b11c-629f12b7e5f4",
       "description": ""
+    },
+    {
+      "id": "6d3a5dd0-3d79-4e4a-b0dd-b4b3d9af4331",
+      "type": "activity",
+      "title": "Traducció AI2Improve",
+      "date": "2026-11-13",
+      "start": "10:00",
+      "endDate": "2026-11-13",
+      "end": "11:00",
+      "minutes": 60,
+      "project": "d0d057bb-6983-41b3-b11c-629f12b7e5f4",
+      "description": ""
     }
   ],
   "notes": [],
