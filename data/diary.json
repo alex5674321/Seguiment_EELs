@@ -291,6 +291,18 @@
       "minutes": 205,
       "project": "9b2482b0-2ea9-4f0a-b432-e7fc993d1a61",
       "description": ""
+    },
+    {
+      "id": "0639950a-20fb-41a5-91ed-34f60b57f74b",
+      "type": "activity",
+      "title": "Fer Format de totes les LPs juntes per temes",
+      "date": "2026-11-05",
+      "start": "10:00",
+      "endDate": "2026-11-05",
+      "end": "12:00",
+      "minutes": 120,
+      "project": "9b2482b0-2ea9-4f0a-b432-e7fc993d1a61",
+      "description": ""
     }
   ],
   "notes": [],
