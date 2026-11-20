@@ -122,10 +122,11 @@
       "date": "2026-10-19",
       "start": "10:00",
       "endDate": "2026-10-19",
-      "end": "12:00",
-      "minutes": 120,
+      "end": "12:20",
+      "minutes": 140,
       "project": "da72c26c-dfb2-476b-a207-9206ca9279eb",
-      "description": ""
+      "description": "",
+      "type": "activity"
     },
     {
       "id": "60bde412-55b2-4a9f-bd05-fb62a7f24946",
